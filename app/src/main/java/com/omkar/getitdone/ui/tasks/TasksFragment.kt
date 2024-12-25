@@ -7,15 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.omkar.getitdone.databinding.FragmentTaksBinding
 import com.omkar.getitdone.date.GetItDoneDatabase
+import com.omkar.getitdone.date.Task
 import com.omkar.getitdone.date.TaskDao
 import kotlin.concurrent.thread
 
-class TasksFragment : Fragment() {
+class TasksFragment : Fragment(), TasksAdapter.TaskUpdatedListener {
 
     private lateinit var binding: FragmentTaksBinding
     private val taskDao: TaskDao by lazy {
         GetItDoneDatabase.getDatabase(requireContext()).getTaskDao()
     }
+    private val adapter = TasksAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,6 +30,7 @@ class TasksFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.recycleView.adapter = adapter
         fetchAllTask()
     }
 
@@ -36,8 +39,15 @@ class TasksFragment : Fragment() {
             val tasks = taskDao.getAllTask()
 
             requireActivity().runOnUiThread {
-                binding.recycleView.adapter = TasksAdapter(tasks = tasks)
+                adapter.setTask(tasks)
             }
+        }
+    }
+
+    override fun onTaskUpdated(task: Task) {
+        thread {
+            taskDao.updateTask(task)
+            fetchAllTask()
         }
     }
 }
