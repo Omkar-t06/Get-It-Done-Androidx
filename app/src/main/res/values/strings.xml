@@ -3,4 +3,9 @@
     <string name="profile_icon_description">Profile Icon</string>
     <string name="add_tasks_description">Add Tasks</string>
     <string name="task_hint">Task</string>
+    <string name="dialog_add_new_task_title_hint">New Task</string>
+    <string name="dialog_add_details_title_hint">Add Details</string>
+    <string name="dialog_add_details_description">Add Details</string>
+    <string name="dialog_star_task_description">Star Task</string>
+    <string name="dialog_save_button_text">Save</string>
 </resources>
