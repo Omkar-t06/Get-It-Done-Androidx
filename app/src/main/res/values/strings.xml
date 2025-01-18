@@ -8,4 +8,5 @@
     <string name="dialog_add_details_description">Add Details</string>
     <string name="dialog_star_task_description">Star Task</string>
     <string name="dialog_save_button_text">Save</string>
+    <string name="tasks_tab_tab_layout_title">Tasks Tab</string>
 </resources>

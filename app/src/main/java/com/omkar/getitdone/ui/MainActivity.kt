@@ -23,57 +23,58 @@ import kotlin.concurrent.thread
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var database: GetItDoneDatabase
+    private val database: GetItDoneDatabase by lazy { GetItDoneDatabase.getDatabase(this) }
     private val taskDao: TaskDao by lazy { database.getTaskDao() }
     private val taskFragment = TasksFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater).apply {
+            pager.adapter = PagerAdapter(this@MainActivity)
+            TabLayoutMediator(tabs, pager) { tabs, _ ->
+                tabs.text = "Tasks"
+            }.attach()
+
+            fab.setOnClickListener {
+                showAddTasksDialog()
+            }
+            setContentView(root)
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        binding.pager.adapter = PagerAdapter(this)
-        TabLayoutMediator(binding.tabs, binding.pager) { tabs, _ ->
-            tabs.text = "Tasks"
-        }.attach()
 
-        binding.fab.setOnClickListener {
-            showAddTasksDialog()
-        }
-
-        database = GetItDoneDatabase.getDatabase(this)
     }
 
     private fun showAddTasksDialog() {
-        val dialogBinding = DialogAddTaskBinding.inflate(layoutInflater)
+        DialogAddTaskBinding.inflate(layoutInflater).apply {
+            val dialog = BottomSheetDialog(this@MainActivity)
+            dialog.setContentView(root)
 
-        val dialog = BottomSheetDialog(this)
-        dialog.setContentView(dialogBinding.root)
-
-        dialogBinding.buttonShowDetails.setOnClickListener {
-            dialogBinding.editTextTaskDetails.visibility =
-                if (dialogBinding.editTextTaskDetails.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-        }
-
-        dialogBinding.buttonSave.setOnClickListener {
-            val task = Task(
-                title = dialogBinding.editTextTaskTitle.text.toString(),
-                description = dialogBinding.editTextTaskDetails.text.toString(),
-            )
-            thread {
-                taskDao.createTask(task)
+            buttonShowDetails.setOnClickListener {
+                editTextTaskDetails.visibility =
+                    if (editTextTaskDetails.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             }
-            dialog.dismiss()
-            taskFragment.fetchAllTask()
-        }
 
-        dialog.show()
+            buttonSave.setOnClickListener {
+                val task = Task(
+                    title = editTextTaskTitle.text.toString(),
+                    description = editTextTaskDetails.text.toString(),
+                )
+                thread {
+                    taskDao.createTask(task)
+                }
+                dialog.dismiss()
+                taskFragment.fetchAllTask()
+            }
+
+            dialog.show()
+        }
     }
 
     inner class PagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
