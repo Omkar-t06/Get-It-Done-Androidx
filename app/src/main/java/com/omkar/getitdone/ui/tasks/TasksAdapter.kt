@@ -3,6 +3,7 @@ package com.omkar.getitdone.ui.tasks
 import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.omkar.getitdone.databinding.ItemTaskBinding
@@ -53,7 +54,12 @@ class TasksAdapter(val listener: TaskUpdatedListener) :
                 }
 
                 textViewTitle.text = task.title
-                textViewDetails.text = task.description
+                if(task.description.isNullOrEmpty()){
+                    textViewDetails.visibility = View.GONE
+                } else {
+                    textViewDetails.visibility = View.VISIBLE
+                    textViewDetails.text = task.description
+                }
 
                 checkBox.setOnClickListener {
                     val updatedTask = task.copy(isComplete = checkBox.isChecked)

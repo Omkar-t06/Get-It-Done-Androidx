@@ -24,6 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/check_box"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/text_view_details"
         tools:text="Task Title" />
 
     <TextView
@@ -35,6 +36,7 @@
         app:layout_constraintEnd_toEndOf="@id/text_view_title"
         app:layout_constraintStart_toStartOf="@id/text_view_title"
         app:layout_constraintTop_toBottomOf="@id/text_view_title"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Task Details" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
