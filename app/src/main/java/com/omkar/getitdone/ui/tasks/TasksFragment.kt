@@ -11,7 +11,7 @@ import com.omkar.getitdone.date.Task
 import com.omkar.getitdone.date.TaskDao
 import kotlin.concurrent.thread
 
-class TasksFragment : Fragment(), TasksAdapter.TaskUpdatedListener {
+class TasksFragment : Fragment(), TasksAdapter.TaskItemClickListener {
 
     private lateinit var binding: FragmentTaksBinding
     private val taskDao: TaskDao by lazy {
@@ -47,6 +47,13 @@ class TasksFragment : Fragment(), TasksAdapter.TaskUpdatedListener {
     override fun onTaskUpdated(task: Task) {
         thread {
             taskDao.updateTask(task)
+            fetchAllTask()
+        }
+    }
+
+    override fun onTaskDelete(task: Task) {
+        thread {
+            taskDao.deleteTask(task)
             fetchAllTask()
         }
     }

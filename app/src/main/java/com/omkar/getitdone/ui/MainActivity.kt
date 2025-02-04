@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -55,6 +56,10 @@ class MainActivity : AppCompatActivity() {
         DialogAddTaskBinding.inflate(layoutInflater).apply {
             val dialog = BottomSheetDialog(this@MainActivity)
             dialog.setContentView(root)
+
+            editTextTaskTitle.addTextChangedListener { input ->
+                buttonSave.isEnabled = !input.isNullOrEmpty()
+            }
 
             buttonShowDetails.setOnClickListener {
                 editTextTaskDetails.visibility =

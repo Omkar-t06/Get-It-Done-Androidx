@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.omkar.getitdone.databinding.ItemTaskBinding
 import com.omkar.getitdone.date.Task
 
-class TasksAdapter(val listener: TaskUpdatedListener) :
+class TasksAdapter(val listener: TaskItemClickListener) :
     RecyclerView.Adapter<TasksAdapter.ViewModel>() {
 
     override fun getItemCount() = tasks.size
@@ -40,6 +40,10 @@ class TasksAdapter(val listener: TaskUpdatedListener) :
 
         fun bind(task: Task) {
             binding.apply {
+                root.setOnLongClickListener {
+                    listener.onTaskDelete(task)
+                    true
+                }
                 checkBox.isChecked = task.isComplete
                 toggleStar.isChecked = task.isStarred
 
@@ -73,7 +77,9 @@ class TasksAdapter(val listener: TaskUpdatedListener) :
         }
     }
 
-    interface TaskUpdatedListener {
+    interface TaskItemClickListener {
         fun onTaskUpdated(task: Task)
+
+        fun  onTaskDelete(task: Task)
     }
 }
