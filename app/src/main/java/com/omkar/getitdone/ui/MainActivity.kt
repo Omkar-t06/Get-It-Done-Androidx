@@ -19,6 +19,7 @@ import com.omkar.getitdone.date.GetItDoneDatabase
 import com.omkar.getitdone.date.Task
 import com.omkar.getitdone.date.TaskDao
 import com.omkar.getitdone.ui.tasks.TasksFragment
+import com.omkar.getitdone.util.InputValidator
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             dialog.setContentView(root)
 
             editTextTaskTitle.addTextChangedListener { input ->
-                buttonSave.isEnabled = !input.isNullOrEmpty()
+                buttonSave.isEnabled = InputValidator.isInputValid(input?.toString())
             }
 
             buttonShowDetails.setOnClickListener {

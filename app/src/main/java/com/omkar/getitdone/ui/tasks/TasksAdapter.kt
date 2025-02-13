@@ -58,7 +58,7 @@ class TasksAdapter(val listener: TaskItemClickListener) :
                 }
 
                 textViewTitle.text = task.title
-                if(task.description.isNullOrEmpty()){
+                if (task.description.isNullOrEmpty()) {
                     textViewDetails.visibility = View.GONE
                 } else {
                     textViewDetails.visibility = View.VISIBLE
@@ -80,6 +80,6 @@ class TasksAdapter(val listener: TaskItemClickListener) :
     interface TaskItemClickListener {
         fun onTaskUpdated(task: Task)
 
-        fun  onTaskDelete(task: Task)
+        fun onTaskDelete(task: Task)
     }
 }
