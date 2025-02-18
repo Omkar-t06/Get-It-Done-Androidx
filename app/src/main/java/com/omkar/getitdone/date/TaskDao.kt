@@ -10,14 +10,14 @@ import androidx.room.Update
 interface TaskDao {
 
     @Insert
-    fun createTask(task: Task)
+    suspend fun createTask(task: Task)
 
     @Query("SELECT * FROM task")
-    fun getAllTask(): List<Task>
+    suspend fun getAllTask(): List<Task>
 
     @Update
-    fun updateTask(task: Task)
+    suspend fun updateTask(task: Task)
 
     @Delete
-    fun deleteTask(task: Task)
+    suspend fun deleteTask(task: Task)
 }

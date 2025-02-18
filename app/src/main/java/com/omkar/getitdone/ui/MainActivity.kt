@@ -3,6 +3,7 @@ package com.omkar.getitdone.ui
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,18 +16,13 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.omkar.getitdone.R
 import com.omkar.getitdone.databinding.ActivityMainBinding
 import com.omkar.getitdone.databinding.DialogAddTaskBinding
-import com.omkar.getitdone.date.GetItDoneDatabase
-import com.omkar.getitdone.date.Task
-import com.omkar.getitdone.date.TaskDao
 import com.omkar.getitdone.ui.tasks.TasksFragment
 import com.omkar.getitdone.util.InputValidator
-import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
-    private val database: GetItDoneDatabase by lazy { GetItDoneDatabase.getDatabase(this) }
-    private val taskDao: TaskDao by lazy { database.getTaskDao() }
     private val taskFragment = TasksFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +46,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
     }
 
     private fun showAddTasksDialog() {
@@ -68,13 +63,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             buttonSave.setOnClickListener {
-                val task = Task(
+                viewModel.createTask(
                     title = editTextTaskTitle.text.toString(),
                     description = editTextTaskDetails.text.toString(),
                 )
-                thread {
-                    taskDao.createTask(task)
-                }
                 dialog.dismiss()
                 taskFragment.fetchAllTask()
             }
