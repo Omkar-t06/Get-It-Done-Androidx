@@ -14,6 +14,10 @@ class TaskRepository(private val taskDao: TaskDao) {
         return taskDao.getAllTask()
     }
 
+    fun getStarredTasks(): Flow<List<Task>> {
+        return  taskDao.getStarredTask()
+    }
+
     suspend fun updateTask(task: Task) {
         taskDao.updateTask(task)
     }
@@ -21,4 +25,5 @@ class TaskRepository(private val taskDao: TaskDao) {
     suspend fun deleteTask(task: Task) {
         taskDao.deleteTask(task)
     }
+
 }

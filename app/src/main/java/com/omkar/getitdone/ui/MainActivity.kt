@@ -2,9 +2,11 @@ package com.omkar.getitdone.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -17,6 +19,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.omkar.getitdone.R
 import com.omkar.getitdone.databinding.ActivityMainBinding
 import com.omkar.getitdone.databinding.DialogAddTaskBinding
+import com.omkar.getitdone.ui.tasks.StarredTasksFragment
 import com.omkar.getitdone.ui.tasks.TasksFragment
 import com.omkar.getitdone.util.InputValidator
 
@@ -30,8 +33,17 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater).apply {
             pager.adapter = PagerAdapter(this@MainActivity)
-            TabLayoutMediator(tabs, pager) { tabs, _ ->
-                tabs.text = "Tasks"
+            pager.currentItem = 1
+            TabLayoutMediator(tabs, pager) { tabs, position ->
+                when (position) {
+                    0 -> tabs.icon =
+                        ContextCompat.getDrawable(this@MainActivity, R.drawable.ic_star_filled)
+
+                    1 -> tabs.text = "Tasks"
+                    2 -> tabs.customView = Button(this@MainActivity).apply {
+                        text = "Add new list"
+                    }
+                }
             }.attach()
 
             fab.setOnClickListener {
@@ -75,10 +87,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class PagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
-        override fun getItemCount(): Int = 1
+        override fun getItemCount(): Int = 3
 
         override fun createFragment(position: Int): Fragment {
-            return TasksFragment()
+            return when (position) {
+                0 -> StarredTasksFragment()
+                else -> TasksFragment()
+            }
         }
     }
 }
