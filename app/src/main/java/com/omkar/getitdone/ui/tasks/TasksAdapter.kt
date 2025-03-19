@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.omkar.getitdone.databinding.ItemTaskBinding
-import com.omkar.getitdone.date.Task
+import com.omkar.getitdone.date.model.Task
 
 class TasksAdapter(val listener: TaskItemClickListener) :
     RecyclerView.Adapter<TasksAdapter.ViewModel>() {

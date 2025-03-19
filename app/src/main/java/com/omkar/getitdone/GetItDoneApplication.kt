@@ -1,19 +1,19 @@
 package com.omkar.getitdone
 
 import android.app.Application
-import com.omkar.getitdone.date.GetItDoneDatabase
-import com.omkar.getitdone.date.TaskDao
+import com.omkar.getitdone.date.TaskRepository
+import com.omkar.getitdone.date.database.GetItDoneDatabase
 
-class GetItDoneApplication: Application() {
+class GetItDoneApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        database = GetItDoneDatabase.getDatabase(this)
-        taskDao = database.getTaskDao()
+        val database = GetItDoneDatabase.getDatabase(this)
+        val taskDao = database.getTaskDao()
+        taskRepository = TaskRepository(taskDao)
     }
 
     companion object {
-        lateinit var database: GetItDoneDatabase
-        lateinit var taskDao: TaskDao
+        lateinit var taskRepository: TaskRepository
     }
 }

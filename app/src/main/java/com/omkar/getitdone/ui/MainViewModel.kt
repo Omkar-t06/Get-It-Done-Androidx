@@ -3,12 +3,12 @@ package com.omkar.getitdone.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.omkar.getitdone.GetItDoneApplication
-import com.omkar.getitdone.date.Task
+import com.omkar.getitdone.date.model.Task
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
 
-    private val taskDao = GetItDoneApplication.taskDao
+    private val taskRepository = GetItDoneApplication.taskRepository
 
     fun createTask(title: String, description: String?) {
         val task = Task(
@@ -16,7 +16,7 @@ class MainViewModel : ViewModel() {
             description = description,
         )
         viewModelScope.launch {
-            taskDao.createTask(task)
+            taskRepository.createTask(task)
         }
     }
 

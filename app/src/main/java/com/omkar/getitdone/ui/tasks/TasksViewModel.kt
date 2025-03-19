@@ -3,28 +3,27 @@ package com.omkar.getitdone.ui.tasks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.omkar.getitdone.GetItDoneApplication
-import com.omkar.getitdone.date.Task
+import com.omkar.getitdone.date.model.Task
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class TasksViewModel : ViewModel() {
 
-    private val taskDao = GetItDoneApplication.taskDao
+    private val taskRepository = GetItDoneApplication.taskRepository
 
-     suspend fun fetchTasks(): List<Task> {
-        val tasks = taskDao.getAllTask()
-        return tasks
+    fun fetchTasks(): Flow<List<Task>> {
+        return taskRepository.getTasks()
     }
 
     fun updateTask(task: Task) {
         viewModelScope.launch {
-            taskDao.updateTask(task)
+            taskRepository.updateTask(task)
         }
     }
 
     fun deleteTask(task: Task) {
         viewModelScope.launch {
-            taskDao.deleteTask(task)
+            taskRepository.deleteTask(task)
         }
     }
-
 }

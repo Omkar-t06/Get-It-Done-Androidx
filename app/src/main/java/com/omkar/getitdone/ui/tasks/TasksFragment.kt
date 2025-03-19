@@ -8,7 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.omkar.getitdone.databinding.FragmentTaksBinding
-import com.omkar.getitdone.date.Task
+import com.omkar.getitdone.date.model.Task
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class TasksFragment : Fragment(), TasksAdapter.TaskItemClickListener {
@@ -34,18 +35,17 @@ class TasksFragment : Fragment(), TasksAdapter.TaskItemClickListener {
 
     fun fetchAllTask() {
         lifecycleScope.launch {
-            val tasks: List<Task> = viewModel.fetchTasks()
-            adapter.setTask(tasks)
+            viewModel.fetchTasks().collectLatest { tasks ->
+                adapter.setTask(tasks)
+            }
         }
     }
 
     override fun onTaskUpdated(task: Task) {
         viewModel.updateTask(task)
-        fetchAllTask()
     }
 
     override fun onTaskDelete(task: Task) {
         viewModel.deleteTask(task)
-        fetchAllTask()
     }
 }

@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -23,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
-    private val taskFragment = TasksFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
             buttonShowDetails.setOnClickListener {
                 editTextTaskDetails.visibility =
-                    if (editTextTaskDetails.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+                    if (editTextTaskDetails.isVisible) View.GONE else View.VISIBLE
             }
 
             buttonSave.setOnClickListener {
@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity() {
                     description = editTextTaskDetails.text.toString(),
                 )
                 dialog.dismiss()
-                taskFragment.fetchAllTask()
             }
 
             dialog.show()
@@ -79,8 +78,7 @@ class MainActivity : AppCompatActivity() {
         override fun getItemCount(): Int = 1
 
         override fun createFragment(position: Int): Fragment {
-            return taskFragment
+            return TasksFragment()
         }
-
     }
 }

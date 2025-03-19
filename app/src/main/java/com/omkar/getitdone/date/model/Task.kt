@@ -1,4 +1,4 @@
-package com.omkar.getitdone.date
+package com.omkar.getitdone.date.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
