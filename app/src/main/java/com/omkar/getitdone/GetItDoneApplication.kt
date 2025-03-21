@@ -10,7 +10,8 @@ class GetItDoneApplication : Application() {
 
         val database = GetItDoneDatabase.getDatabase(this)
         val taskDao = database.getTaskDao()
-        taskRepository = TaskRepository(taskDao)
+        val taskListDao = database.getTaskListDao()
+        taskRepository = TaskRepository(taskDao, taskListDao)
     }
 
     companion object {

@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayoutMediator
@@ -22,6 +23,8 @@ import com.omkar.getitdone.databinding.DialogAddTaskBinding
 import com.omkar.getitdone.ui.tasks.StarredTasksFragment
 import com.omkar.getitdone.ui.tasks.TasksFragment
 import com.omkar.getitdone.util.InputValidator
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,19 +35,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater).apply {
-            pager.adapter = PagerAdapter(this@MainActivity)
-            pager.currentItem = 1
-            TabLayoutMediator(tabs, pager) { tabs, position ->
-                when (position) {
-                    0 -> tabs.icon =
-                        ContextCompat.getDrawable(this@MainActivity, R.drawable.ic_star_filled)
 
-                    1 -> tabs.text = "Tasks"
-                    2 -> tabs.customView = Button(this@MainActivity).apply {
-                        text = "Add new list"
-                    }
+            lifecycleScope.launch {
+                viewModel.getTaskLists().collectLatest { taskLists ->
+                    pager.adapter = PagerAdapter(
+                        this@MainActivity,
+                        numberOfPages = taskLists.size + 2
+                    )
+                    pager.currentItem = 1
+                    TabLayoutMediator(tabs, pager) { tabs, position ->
+                        when (position) {
+                            0 -> tabs.icon =
+                                ContextCompat.getDrawable(
+                                    this@MainActivity,
+                                    R.drawable.ic_star_filled
+                                )
+
+                            taskLists.size + 1 -> tabs.customView =
+                                Button(this@MainActivity).apply {
+                                    text = "Add new list"
+                                }
+
+                            else -> tabs.text = taskLists[position - 1].name
+                        }
+                    }.attach()
                 }
-            }.attach()
+            }
 
             fab.setOnClickListener {
                 showAddTasksDialog()
@@ -86,8 +102,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    inner class PagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
-        override fun getItemCount(): Int = 3
+    inner class PagerAdapter(activity: FragmentActivity, private val numberOfPages: Int) :
+        FragmentStateAdapter(activity) {
+        override fun getItemCount(): Int = numberOfPages
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {

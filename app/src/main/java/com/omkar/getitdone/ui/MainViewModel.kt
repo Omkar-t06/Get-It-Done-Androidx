@@ -10,6 +10,8 @@ class MainViewModel : ViewModel() {
 
     private val taskRepository = GetItDoneApplication.taskRepository
 
+    fun getTaskLists() = taskRepository.getTaskLists()
+
     fun createTask(title: String, description: String?) {
         val task = Task(
             title = title,
