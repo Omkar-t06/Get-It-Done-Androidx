@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.omkar.getitdone.date.model.Task
 import com.omkar.getitdone.date.model.TaskList
 
-@Database(entities = [Task::class, TaskList::class], version = 3)
+@Database(entities = [Task::class, TaskList::class], version = 4)
 abstract class GetItDoneDatabase : RoomDatabase() {
     abstract fun getTaskDao(): TaskDao
 
@@ -43,6 +43,7 @@ abstract class GetItDoneDatabase : RoomDatabase() {
                     "get-it-done-database"
                 )
                     .addMigrations(Migration_2_to_3)
+                    .fallbackToDestructiveMigration()
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)

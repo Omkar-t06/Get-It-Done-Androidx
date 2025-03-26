@@ -20,6 +20,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.omkar.getitdone.R
 import com.omkar.getitdone.databinding.ActivityMainBinding
 import com.omkar.getitdone.databinding.DialogAddTaskBinding
+import com.omkar.getitdone.date.model.TaskList
 import com.omkar.getitdone.ui.tasks.StarredTasksFragment
 import com.omkar.getitdone.ui.tasks.TasksFragment
 import com.omkar.getitdone.util.InputValidator
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
+    private var currentTaskList: List<TaskList> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 viewModel.getTaskLists().collectLatest { taskLists ->
+                    currentTaskList = taskLists
                     pager.adapter = PagerAdapter(
                         this@MainActivity,
                         numberOfPages = taskLists.size + 2
@@ -91,9 +94,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             buttonSave.setOnClickListener {
+                val selectedTaskId = currentTaskList[binding.pager.currentItem - 1].id
                 viewModel.createTask(
                     title = editTextTaskTitle.text.toString(),
                     description = editTextTaskDetails.text.toString(),
+                    listId = selectedTaskId
                 )
                 dialog.dismiss()
             }
