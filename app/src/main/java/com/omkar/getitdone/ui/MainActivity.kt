@@ -59,7 +59,9 @@ class MainActivity : AppCompatActivity() {
                             taskLists.size + 1 -> {
                                 val buttonBinding = TabButtonBinding.inflate(layoutInflater)
                                 tabs.customView = buttonBinding.root.apply {
-                                    showAddTaskListDialog()
+                                    this.setOnClickListener {
+                                        showAddTaskListDialog()
+                                    }
                                 }
                             }
 
@@ -95,6 +97,7 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton(getString(R.string.cancel_button_test)) { dialog, _ ->
                 dialog.dismiss()
             }
+            .show()
     }
 
     private fun showAddTasksDialog() {
