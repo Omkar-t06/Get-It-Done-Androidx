@@ -9,4 +9,9 @@
     <string name="dialog_star_task_description">Star Task</string>
     <string name="dialog_save_button_text">Save</string>
     <string name="tasks_tab_tab_layout_title">Tasks Tab</string>
+    <string name="add_new_list_text_button_text">Add New List</string>
+    <string name="add_new_list_dialog_title">Add new list</string>
+    <string name="create_button_text">Create</string>
+    <string name="cancel_button_test">Cancel</string>
+    <string name="add_new_list_field_hint">List name</string>
 </resources>

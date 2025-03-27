@@ -23,4 +23,11 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun addNewTaskList(listName: String?) {
+        if (listName.isNullOrEmpty()) return
+        viewModelScope.launch {
+            taskRepository.createTaskList(listName)
+        }
+    }
+
 }
