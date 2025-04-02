@@ -11,8 +11,8 @@ class TasksViewModel : ViewModel() {
 
     private val taskRepository = GetItDoneApplication.taskRepository
 
-    fun fetchTasks(): Flow<List<Task>> {
-        return taskRepository.getTasks()
+    fun fetchTasks(taskListId: Int): Flow<List<Task>> {
+        return taskRepository.getTasks(taskListId)
     }
 
     fun updateTask(task: Task) {
